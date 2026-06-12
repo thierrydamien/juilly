@@ -82,6 +82,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,31,46,0.9
   color:var(--gold);line-height:1;margin-bottom:8px}
 .about-friends-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
   color:rgba(245,240,232,0.35);margin-bottom:40px}
+.about-right h2{font-family:'Playfair Display',serif;font-size:clamp(24px,2.6vw,30px);
+  font-weight:700;line-height:1.25;color:var(--cream)}
+.about-right em{color:var(--gold);font-style:italic}
+.group-photo{width:100%;aspect-ratio:3/2;background:rgba(245,240,232,0.04);
+  border:1px dashed rgba(201,168,76,0.3);margin-bottom:28px;
+  display:flex;align-items:center;justify-content:center;transition:border-color 0.2s}
+.group-photo:hover{border-color:rgba(201,168,76,0.55)}
+.group-photo-inner{display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:rgba(245,240,232,0.35);text-align:center}
+.group-photo-inner span{font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500}
+.group-photo-inner small{font-size:11px;opacity:0.6;font-style:italic}
 
 /* SHOP */
 .shop{padding:96px 48px;max-width:1200px;margin:0 auto}
@@ -302,19 +313,61 @@ footer{background:var(--navy);padding:60px 48px 28px;color:rgba(245,240,232,0.45
 .toast.show{transform:translateX(-50%) translateY(0)}
 
 @media(max-width:768px){
-  nav{padding:0 20px}
+  nav{padding:0 18px;height:58px}
   .nav-links{display:none}
+  .nav-logo-text{font-size:18px}
+  .nav-logo img{height:30px;width:30px}
+  .cart-btn{font-size:0;gap:0}
+  .cart-btn svg{width:22px;height:22px}
+  .cart-count{position:absolute;top:8px;right:10px}
+
+  .hero{padding:90px 22px 70px;min-height:100vh}
+  .hero-logo-wrap img{width:190px;height:190px}
+  .hero h1{margin-bottom:28px}
+  .hero-tagline{font-size:17px}
+
   .about{grid-template-columns:1fr}
-  .about-left{border-right:none;border-bottom:1px solid rgba(201,168,76,0.12);
-    padding:60px 24px}
-  .about-right{padding:60px 24px}
-  .shop{padding:60px 20px}
-  .product-grid{grid-template-columns:1fr 1fr;gap:12px}
-  .modal{grid-template-columns:1fr}
-  .checkout-modal{grid-template-columns:1fr}
-  .checkout-summary-section{display:none}
+  .about-left{border-right:none;border-bottom:1px solid rgba(201,168,76,0.12);padding:56px 24px}
+  .about-right{padding:56px 24px}
+  .about h2{font-size:24px}
+
+  .shop{padding:56px 18px}
+  .shop-header{flex-direction:column;align-items:flex-start;gap:8px}
+  .shop-header h2{font-size:30px}
+  .product-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .product-info{padding:14px 14px 18px}
+  .product-name{font-size:15px}
+  .product-desc{font-size:11px}
+
+  /* Product modal: full screen, scrollable */
+  .modal-overlay{padding:0}
+  .modal{grid-template-columns:1fr;max-height:100vh;height:100vh}
+  .modal-panel{min-height:auto;padding:16px}
+  .modal-panel-photo img{min-height:auto;max-height:50vh}
+  .modal-details{padding:32px 24px}
+  .modal-close{background:rgba(255,255,255,0.9);border-radius:50%}
+  .size-btn{width:52px;height:52px}
+
+  /* Checkout: stack, keep summary ABOVE form so people see what they pay */
+  .checkout-overlay{padding:0}
+  .checkout-modal{grid-template-columns:1fr;max-height:100vh;height:100vh}
+  .checkout-summary-section{display:block;order:-1;padding:28px 24px 24px}
+  .checkout-form-section{border-right:none;padding:32px 24px 40px}
+
   .cart-drawer{width:100%;right:-100%}
+
   .footer-top{grid-template-columns:1fr;gap:28px}
+
+  /* Bigger tap targets */
+  .qty-btn{min-height:44px;min-width:44px}
+  .color-swatch{width:38px;height:38px}
+}
+
+@media(max-width:420px){
+  .product-grid{grid-template-columns:1fr;gap:14px}
+  .hero-logo-wrap img{width:160px;height:160px}
+  .hero h1{font-size:48px}
+  .shop-header h2{font-size:26px}
 }
 </style>
 </head>
@@ -369,11 +422,24 @@ footer{background:var(--navy);padding:60px 48px 28px;color:rgba(245,240,232,0.45
     </div>
     <div class="about-right">
       <div class="about-label">Le projet</div>
-      <div class="about-friends-number">10</div>
-      <div class="about-friends-label">anciens élèves — années différentes</div>
       <div class="about-divider"></div>
-      <p>On s'est connus à Juilly. On ne s'est pas perdus de vue. Un jour on a eu l'idée de faire quelque chose ensemble — pas une boîte, pas une marque au sens sérieux du terme.</p>
-      <p>Juste un moyen de porter ce qu'on a en commun. Et de croiser d'autres anciens dans la rue qui reconnaissent l'écusson.</p>
+      <h2 style="margin-bottom:24px">Nous sommes 10. Du CP à la terminale, ensemble.</h2>
+
+      <div class="group-photo" id="groupPhoto">
+        <div class="group-photo-inner">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <circle cx="8.5" cy="10" r="1.5"/>
+            <path d="M21 16l-5-5-4 4-2-2-7 7"/>
+          </svg>
+          <span>Notre photo de groupe</span>
+          <small>(à venir)</small>
+        </div>
+      </div>
+
+      <p>On s'est rencontrés au CP et on a fait toute notre scolarité ensemble, jusqu'en terminale. Depuis, on ne s'est jamais perdus de vue. Un jour, autour d'un verre, on a eu cette idée : et si on faisait quelque chose ensemble ?</p>
+      <p>Alors voilà la vérité, sans détour : <strong style="color:rgba(245,240,232,0.85)">ce n'est pas une vraie marque, et tout ce qu'on gagne ici nous revient.</strong> Chaque t-shirt vendu finance notre prochain week-end, notre prochain dîner, la prochaine fois où les 10 se retrouvent au même endroit.</p>
+      <p>Donc en achetant une pièce, vous portez l'écusson <em>et</em> vous nous offrez une soirée. On trouve ça plutôt sympa comme deal.</p>
     </div>
   </div>
 </section>
